@@ -1,12 +1,12 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
 <script type="text/javascript" src="https://www.moneybutton.com/moneybutton.js"></script>
 <title>Work</title>
 <script>
-// neongenesis fetch data 
- 
+// neongenesis fetch data
+
  // what are we searching for - this is the bitquery
 var query = {
   "v": 3,
@@ -21,27 +21,25 @@ var query = {
     "limit": 20
   }
 }
-
-// neon genesis takes a query string encoded as base 64 so we will convert the above query to that. 
+// neon genesis takes a query string encoded as base 64 so we will convert the above query to that.
 // We do this so that we can edit the above dynamically later on
-
 var b64 = btoa(JSON.stringify(query))
-
 // later this will be to pay for neon genesis access, for now it's free.
 var header = { headers: { key: "1AiDvMd4ompjtS1QfMf8PNuv5ZXNt1Ewqn" } }
-
 // this is the base URL plus our query in base 64
 var url = "https://neongenesis.bitdb.network/q/1HcBPzWoKDL2FhCMbocQmLuFTYsiD73u1j/" + b64
-
 // make the fetch to neon genesis, then create a json object from the returned stream and do something on the page with it.
 fetch(url,header).then(function(r) {
     return r.json()
   }).then( (r) => {
     // do something with the data, r
-    document.querySelector('.target').innerHTML = r
+    // r.c is an Array of confirmed transactions. r.u is unconfirmed. The whole object is logged to console so you can inspect it.
+    r.c.forEach( (message) => {
+      msg = String(message.out[0].s4)
+      document.querySelector('.target').innerHTML += `<p>${msg}</p>`
+    })
     console.log(r)
   })
-}
 </script>
 </head>
 <body>
@@ -49,13 +47,34 @@ fetch(url,header).then(function(r) {
 <h1>Under Construction</h1>
 <p>Send Bitcoin (BSV) to the emperor:</p>
 
-<div class="money-button"
-  data-to="emperor@moneybutton.com"
-  data-amount=".001"
-  data-currency="BSV"
-></div>
- 
+<div class="my-moneybutton">
+</div>
+
+<script>
+const doSomethingCool = (payment) => {
+  // or just log the payment for now.
+  console.log(payment)
+}
+
+var opreturn = JSON.stringify({"iAmSome": "json data of some sort", "chess-move": "G1toD7"})
+var buttondata = JSON.stringify('I am a pleasant message for users to see as receipt of participation in the game.')
+
+const mbTargetDiv = document.querySelector('.my-moneybutton')
+moneyButton.render(mbTargetDiv, {
+    to: 'example@moneybutton.com',
+    amount: "0.01",
+    currency: "USD",
+    label: 'play',
+    buttonData: buttondata,
+    opReturn: opreturn,
+    onPayment: doSomethingCool,
+    type: 'tip',
+    successMessage: 'You won!'
+  })
+</script>
+
+
  <div class='target'>Nothing until the fetch...</div>
 
 </body>
-</html> 
+</html>
