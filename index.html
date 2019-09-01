@@ -1,9 +1,45 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
 <script type="text/javascript" src="https://www.moneybutton.com/moneybutton.js"></script>
 <title>Work</title>
+<script>
+// neongenesis fetch data
+
+ // what are we searching for - this is the bitquery
+var query = {
+  "v": 3,
+  "q": {
+    "find": {
+      "$text": {"$search" : "Daniel"}
+    },
+    "sort": {"blk.i":-1, "i":-1},
+    "project": {
+      "out.s4": 1, "out.s5": 1, "out.s6": 1, "out.s10": 1, "out.s14": 1, "out.s19": 1
+    },
+    "limit": 20
+  }
+}
+// neon genesis takes a query string encoded as base 64 so we will convert the above query to that.
+// We do this so that we can edit the above dynamically later on
+var b64 = btoa(JSON.stringify(query))
+// later this will be to pay for neon genesis access, for now it's free.
+var header = { headers: { key: "1AiDvMd4ompjtS1QfMf8PNuv5ZXNt1Ewqn" } }
+// this is the base URL plus our query in base 64
+var url = "https://neongenesis.bitdb.network/q/1HcBPzWoKDL2FhCMbocQmLuFTYsiD73u1j/" + b64
+// make the fetch to neon genesis, then create a json object from the returned stream and do something on the page with it.
+fetch(url,header).then(function(r) {
+    return r.json()
+  }).then( (r) => {
+    // do something with the data, r
+    r.c.forEach( (message) => {
+      msg = String(message.out[0].s4)
+      document.querySelector('.target').innerHTML += `<p>${msg}</p>`
+    })
+    console.log(r)
+  })
+</script>
 </head>
 <body>
 
@@ -16,5 +52,7 @@
   data-currency="BSV"
 ></div>
 
+ <div class='target'>Nothing until the fetch...</div>
+
 </body>
-</html> 
+</html>
