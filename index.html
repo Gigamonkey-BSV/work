@@ -13,6 +13,10 @@ var query = {
   "q": {
     "find": {
       "$text": {"$search" : "Daniel"}
+     // you can also filter by address or OP_return output, which might be a Bitcom protcol address
+     // example:
+     // "out.s1": "1P8FmmWdyRY1bmHJso6nGc7smBSvwvFoje",
+     // "out.s3": "REPLY"
     },
     "sort": {"blk.i":-1, "i":-1},
     "project": {
@@ -41,11 +45,23 @@ fetch(url,header).then(function(r) {
     console.log(r)
   })
 </script>
+ 
+<style>
+body {
+ background-color: black;
+ color: white;
+ text-align: center;
+}
+h1 {
+ font-size: 50px;
+}
+</style>
+ 
 </head>
 <body>
 
 <h1>Under Construction</h1>
-<p>Send Bitcoin (BSV) to the emperor:</p>
+<p>Send Bitcoin (BSV) to the Emperor:</p>
 
 <div class="my-moneybutton">
 </div>
