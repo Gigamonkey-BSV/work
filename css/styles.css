@@ -1,0 +1,256 @@
+/* Main
+-------------------------------------------------- */
+html,
+body {
+  height: 100%;
+}
+
+body {  
+  font-family: 'Muli', sans-serif;  
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-bottom: 30px;
+  /* background-color: #f5f5f5; */
+  color: #fff;
+  background-color: #1d2640;
+}
+
+h1, p {
+  color: #e9ecf8;
+}
+
+a {
+  color: #97a4c8;  
+}
+
+a:hover, a:active {
+  text-decoration: none;
+  color: #007bff;
+}
+
+code {
+  color: #d32f2f;
+  font-size: 100%;
+}
+
+label {
+  color: #99a5ca;
+}
+
+/* Form and elements 
+-------------------------------------------------- */
+.btn {
+  border-radius: 38px;  
+}
+
+.btn-primary {
+  background-color: #e54d3f;
+}
+
+.btn-sm, .btn-md {
+  border-radius: 19px;
+}
+
+.btn-lg {
+  border-radius: 38px;
+}
+
+.custom-control-label {
+  color: #e9ecf8;
+  font-size: 1rem;
+  line-height: 1.45rem;
+  padding-left: 0.5rem;
+}
+
+.form-createtx {
+  width: 100%;
+  max-width: 432px;
+  padding: 30px;
+  margin: auto;
+  background: #232e4d;
+  border-radius: 9px;
+}
+
+.form-control {
+  background-color: #232e4d;
+  border: 1px solid #334371;
+  color: #fff;
+}
+
+.form-label-group > input {
+  border-radius: 38px;  
+}
+
+.form-control::-webkit-input-placeholder { color: #586283; }  /* WebKit, Blink, Edge */
+.form-control:-moz-placeholder { color: #586283; }  /* Mozilla Firefox 4 to 18 */
+.form-control::-moz-placeholder { color: #586283; }  /* Mozilla Firefox 19+ */
+.form-control:-ms-input-placeholder { color: #586283; }  /* Internet Explorer 10-11 */
+.form-control::-ms-input-placeholder { color: #586283; }  /* Microsoft Edge */
+
+.form-check {
+  padding-left: 0;
+}
+
+.form-control:focus {
+  background-color: #232e4d;
+  border: 1px solid #ffcdd2;
+  color: #fff;
+  box-shadow: none;
+}
+
+.slider.slider-horizontal {
+  width: 100%;
+}
+
+.slider-handle {
+  background-color: #007bff;
+  background-image: none;
+}
+
+.btn-submit {
+  margin-left: 0;
+  margin-top: 15px;
+}
+
+.form-label-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.form-label-group > input,
+.form-label-group > label {
+  height: 3.125rem;
+  padding: .75rem;  
+}
+
+.upload-drop-zone {
+  height: 200px;
+  border-width: 2px;
+  margin-bottom: 20px;
+}
+
+.upload-drop-zone {
+  color: #576182;
+  border-style: dashed;
+  border-color: #576182;
+  line-height: 200px;
+  text-align: center
+}
+
+.upload-drop-zone.drop {
+  color: #222;
+  border-color: #222;
+}
+
+#refreshBtn {
+    color: #97a4c8;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+#refreshBtn:hover {
+  color: #007bff;
+}
+
+/* Confirmation modal
+-------------------------------------------------- */
+.modal-header {
+  display: block;
+  background-color: #e54d3f;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+  border: 0;
+}
+
+.modal-header h5 {
+  text-align: center;
+}
+
+.modal-body i {
+  display: block;
+  text-align: center;
+  font-size: 4.3rem;
+  color: #e54d3f;
+}
+
+.modal-line {
+  display: block;
+  color: rgb(102, 100, 100);
+}
+
+.modal-footer {
+  display: block;
+  text-align: center;
+}
+
+.modal-footer .btn-primary {
+  background-color: #e54d3f;
+  border-color: #e54d3f;
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: #c5463a;
+}
+
+.modal-footer .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled):active {
+    box-shadow: 0 0 0 0.2rem #e54d3f87; 
+    background-color: #e54d3f;
+    border-color: #f44336      
+}
+
+/* Other
+-------------------------------------------------- */
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.rotateIn {
+    -webkit-animation-name: rotateIn;
+    animation-name: rotateIn;
+}
+
+@-webkit-keyframes rotateIn{from{opacity:0;transform:rotate3d(0,0,1,-200deg);transform-origin:center}to{opacity:1;transform:translate3d(0,0,0);transform-origin:center}}@keyframes rotateIn{from{opacity:0;transform:rotate3d(0,0,1,-200deg);transform-origin:center}to{opacity:1;transform:translate3d(0,0,0);transform-origin:center}}.rotateIn{-webkit-animation-name:rotateIn;animation-name:rotateIn}
+
+/* Fallback for Edge
+-------------------------------------------------- */
+@supports (-ms-ime-align: auto) {
+  .form-label-group > label {
+    display: none;
+  }
+  .form-label-group input::-ms-input-placeholder {
+    color: #777;
+  }
+}
+
+/* Fallback for IE
+-------------------------------------------------- */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .form-label-group > label {
+    display: none;
+  }
+  .form-label-group input:-ms-input-placeholder {
+    color: #777;
+  }
+}

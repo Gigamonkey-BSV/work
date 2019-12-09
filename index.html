@@ -1,97 +1,159 @@
-<!DOCTYPE html>
-<html>
-<head>
-<script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
-<script type="text/javascript" src="https://www.moneybutton.com/moneybutton.js"></script>
-<title>Work</title>
-<script>
-// neongenesis fetch data
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Purchase PoW, Create TX">
+    <meta name="author" content="Daniel Krawisz, and Bitcoin Stuff contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Create TX form</title>
 
- // what are we searching for - this is the bitquery
-var query = {
-  "v": 3,
-  "q": {
-    "find": {
-      "$text": {"$search" : "Daniel"}
-     // you can also filter by address or OP_return output, which might be a Bitcom protcol address
-     // example:
-     // "out.s1": "1P8FmmWdyRY1bmHJso6nGc7smBSvwvFoje",
-     // "out.s3": "REPLY"
-    },
-    "sort": {"blk.i":-1, "i":-1},
-    "project": {
-      "out.s4": 1, "out.s5": 1, "out.s6": 1, "out.s10": 1, "out.s14": 1, "out.s19": 1
-    },
-    "limit": 20
-  }
-}
-// neon genesis takes a query string encoded as base 64 so we will convert the above query to that.
-// We do this so that we can edit the above dynamically later on
-var b64 = btoa(JSON.stringify(query))
-// later this will be to pay for neon genesis access, for now it's free.
-var header = { headers: { key: "1AiDvMd4ompjtS1QfMf8PNuv5ZXNt1Ewqn" } }
-// this is the base URL plus our query in base 64
-var url = "https://neongenesis.bitdb.network/q/1HcBPzWoKDL2FhCMbocQmLuFTYsiD73u1j/" + b64
-// make the fetch to neon genesis, then create a json object from the returned stream and do something on the page with it.
-fetch(url,header).then(function(r) {
-    return r.json()
-  }).then( (r) => {
-    // do something with the data, r
-    // r.c is an Array of confirmed transactions. r.u is unconfirmed. The whole object is logged to console so you can inspect it.
-    r.c.forEach( (message) => {
-      msg = String(message.out[0].s4)
-      document.querySelector('.target').innerHTML += `<p>${msg}</p>`
-    })
-    console.log(r)
-  })
-</script>
- 
-<style>
-body {
- background-color: black;
- color: white;
- text-align: center;
-}
-h1 {
- font-size: 50px;
-}
-</style>
- 
-</head>
-<body>
+    <!-- Bootstrap v4.x core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Bootstrap slider component: https://github.com/seiyria/bootstrap-slider -->
+    <link href="css/bootstrap-slider.min.css" rel="stylesheet">
 
-<h1>Under Construction</h1>
-<p>Send Bitcoin (BSV) to the Emperor:</p>
+    <!-- Google font - muli -->
+    <link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet">    
+    <!-- Material design icon font (choose one: outlined/twotone/round/sharp) -->
+    <!-- https://material.io/resources/icons/?style=outline -->
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
 
-<div class="my-moneybutton">
-</div>
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <form class="form-createtx">
+      <!-- placeholder image -->
+      <div class="text-center mb-4">
+        <img class="mb-4" src="img/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Create TX</h1>
+        <p>Please refer to our <a href="#">upload guidelines</a> for more information</p>
+      </div>
+      <!-- difficulty slider -->
+      <div class="form-label-group">        
+        <!-- js vars need to go in data-slider-min/max/step/value -->
+        <input id="diffSlider" type="text" data-slider-min="0" data-slider-max="1" data-slider-step="0.000001" data-slider-value="0.420"/>
+        <span id="diffSliderLabel" style="color: #97a4c8;color: #97a4c8;font-weight:bold;font-size: 0.9rem;">Target difficulty: <span id="diffSliderVal" style="color:#fff">0.420</span></span>
+      </div>
+      <!-- difficulty slider -->
+      <div class="form-label-group">
+        <input type="number" step="0.00001" id="inputBitcoins" class="form-control" placeholder="# Bitcoins to spend" required>
+      </div>
+      <!-- radios -->
+      <div id="sendOptions" class="form-label-group">
+        <div class="form-check paste-text">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="pasteText" name="customRadio" class="custom-control-input send-option">
+            <label class="custom-control-label" for="pasteText" style="line-height: 1.45rem;">Paste text</label>
+          </div>
+        </div>
+        <div class="form-check upload-file">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="uploadFile" name="customRadio" class="custom-control-input send-option">
+            <label class="custom-control-label" for="uploadFile" style="line-height: 1.45rem;">Upload file</label>
+          </div>
+        </div>
+        <div class="form-check provide-hash">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="provideHash" name="customRadio" class="custom-control-input send-option">
+            <label class="custom-control-label" for="provideHash" style="line-height: 1.45rem;">Provide hash</label>
+          </div>
+        </div>
+        <i id="refreshBtn" class="material-icons" style="display:none;" data-selected="null">refresh</i>
+      </div>
+      <!-- fields for option selections -->
+      <div id="optionFields">
+        <!-- Paste text field -->
+        <textarea class="form-control" style="display:none;" id="pasteTextField" placeholder="Paste text here (limit: 500 characters)" rows="3"></textarea>
+        <!-- Upload / drop field -->
+        <div class="upload-drop-zone" style="display:none;" id="uploadFileField">
+          Browse or drag and drop attachments here
+        </div>          
+        <!-- Provide hash field -->
+        <textarea class="form-control" style="display:none;" id="provideHashField" placeholder="Paste hash here (limit: 500 characters)" rows="3"></textarea>
+      </div>
+      <!-- submit button -->
+      <button type="button" class="btn btn-danger btn-lg btn-submit" style="width:100%">Submit</button>
+      <hr />
+    </form>
+    <!-- confirmation box -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Confirmation</h5>
+          </div>
+          <div class="modal-body">
+            <i class="material-icons animated rotateIn">confirmation_number</i>
+            <span class="modal-line">Target difficulty: <em>0.420</em></span>
+            <span class="modal-line">Bitcoins to spend: <em>0.002131</em></span>
+            <span class="modal-line">Option: <em>Upload file (ex3iuasydghg123.txt)</em></span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-md btn-primary">Confirm and send</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<script>
-const doSomethingCool = (payment) => {
-  // or just log the payment for now.
-  console.log(payment)
-}
+    <!-- JS at end of body for optimized loading -->
+    <script type='text/javascript' src="js/jquery.min.js"></script>    
+    <script type='text/javascript' src="js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="js/bootstrap-slider.min.js"></script>
+    <script type="text/javascript">
+      function expo(x, f) {
+        return Number.parseFloat(x).toExponential(f);
+      }
+      // logarithmic scale slider vars
+      var min = 0; // slider min
+      var max = 1; // slider max
+      var toDiff = Math.pow(2, 256) - 1;
+      var steps = ? // how do we get step interval       
+      console.log(toDiff); // target diff.
+      console.log(expo(toDiff, 0)); // exponent ?
+      // ...
+    </script>
 
-var opreturn = JSON.stringify({"iAmSome": "json data of some sort", "chess-move": "G1toD7"})
-var buttondata = JSON.stringify('I am a pleasant message for users to see as receipt of participation in the game.')
+    <!-- jQuery -->
+    <script type='text/javascript'>
+      $(document).ready(function() {
+        $("#diffSlider").slider();
+        $("#diffSlider").on("slide", function(slideEvt) {
+          $("#diffSliderVal").text(slideEvt.value);
+      });
 
-const mbTargetDiv = document.querySelector('.my-moneybutton')
-moneyButton.render(mbTargetDiv, {
-    to: 'example@moneybutton.com',
-    amount: "0.01",
-    currency: "USD",
-    label: 'play',
-    buttonData: buttondata,
-    opReturn: opreturn,
-    onPayment: doSomethingCool,
-    type: 'tip',
-    successMessage: 'Thank you!!',
-    clientIdentifier: 'f2069e9aeda19cf958a52084bb9ea3d7'
-  })
-</script>
+      // radio options 
+      $("input.send-option").click(function(e) {
+        // hide other options and show corresponding field
+        var selected = $(this).attr("id");
+        var fieldToShow = selected + "Field";
+        $("#" + selected).parent().parent().siblings().hide("fast");
+        $("#" + fieldToShow).show("fast");
+        $("#refreshBtn").fadeIn("slow");           
+        $("#refreshBtn").data("selected", selected);
+        e.stopPropagation();
+      });
 
+      // options refresh/repick
+      $("#refreshBtn").click(function(e) {
+        // reshow all options
+        selected = $(this).data("selected");
+        document.getElementById(selected).checked = false; // jQuery's prop wasn't working in firefox so used normal js here (could just be my buggy browser though)
+        $("#refreshBtn").data("selected", "null");
+        $("#optionFields").children().hide("fast");
+        $("#sendOptions").children().show("fast");
+        $("#refreshBtn").hide("fast");
+        e.stopPropagation();
+      });
 
- <div class='target'>Nothing until the fetch...</div>
+      // submit - confirmation modal
+      $(".btn-submit").click(function(e) {
+        $("#exampleModalCenter").modal();
+      });
 
-</body>
+    });      
+    </script>
+  </body>
 </html>
